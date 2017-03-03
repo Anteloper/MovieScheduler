@@ -28,7 +28,7 @@ I solved this problem recursively, using the following rules<br \>
  4. If it did, use the original showtime, not the easy-to-read one.<br \>
  5. Repeat the above rules on the next latest showtime, using this one as the new "closing time"<br \><br \>
 
-In choosing how to store the data in an abstract data type, I was faced with choice of classes or structs.<br \>
-In some ways, this problem lended itself to structs, as the member variables had no real need to be protected from the programmer using them <br \>
-and the movie objects were essentially just a bag of data, with no crucial member functions. I opted for classes instead however, <br \>
-largely because the Movie data type needed to std::strings which aren't primitive types and minimize the advantages of structs.<br \>
+In choosing how to store the data in an abstract data type, I was faced with choice of classes or structs. 
+In some ways, this problem lended itself to structs, as the member variables had no real need to be protected from the programmer using them
+and the movie objects were essentially just a bag of data, with no crucial member functions. I opted for classes instead however,
+largely because the Movie data type needed to std::strings which aren't primitive types and minimize the advantages of structs.
