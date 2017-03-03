@@ -18,7 +18,7 @@ const int cleanupTime = 35;
 const int setupTime = 60;
 
 
-std::vector<Movie> readFile(const char * filename);
+void readFile(const char * filename, std::vector<Movie> &movies);
 std::string getDateString();
 int getWeekday();
 int numberOfShows(int showTime, int runTime, int openTime);
@@ -27,11 +27,11 @@ void printScheduleOfMovie(Movie mov, int openTime, int closeTime);
 std::vector<int> populateShowtimes(int runTime, int mustEndBy, int openTime, std::vector<int> timesSoFar=std::vector<int>());
 
 
-
 int main(int argc, const char * argv[]) {
     int openTime = getWeekday() < 5 ? 480 : 630;
     int closeTime = getWeekday() < 5 ? 1380 : 1410;
-
+    std::vector<Movie> movies;
+    
     //User can optionally change open/close time from the command line
     //First argument after filename is opening time in minutes since midnight of that morning
     //Second argument after filename is closing time in minnutes since midnight of that morning
@@ -43,7 +43,7 @@ int main(int argc, const char * argv[]) {
     if(argc >=2){
         try{
             //Populate list of Movie objects
-            std::vector<Movie> movies = readFile(argv[1]);
+            readFile(argv[1], movies);
             
             //Print Schedule Header
             std::cout << getDateString() << std::endl << std::endl;
@@ -63,11 +63,10 @@ int main(int argc, const char * argv[]) {
 }
 
 
-std::vector<Movie> readFile(const char * fileName){
+void readFile(const char * fileName, std::vector<Movie> &movies){
     std::ifstream inputFile;
     std::string line;
-    
-    std::vector<Movie> movies;
+
     inputFile.open(fileName);
     if(inputFile){
         //Clear the header line
@@ -78,7 +77,6 @@ std::vector<Movie> readFile(const char * fileName){
             movies.push_back(Movie(line));
         
         inputFile.close();
-        return movies;
     }
     else
         throw(std::string("Could not open the file inputted, the program will exit now.\n"));
@@ -107,7 +105,6 @@ void printScheduleOfMovie(Movie mov, int openTime, int closeTime){
     std::cout << std::endl << std::endl;
     
 }
-
 
 
 
@@ -155,7 +152,7 @@ int numberOfShows(int showTime, int runTime, int openTime){
 
 
 
-/*TIME FORMATTING FUNCTIONS**/
+/*DATE AND TIME FORMATTING FUNCTIONS*/
 
 
 //Returns a readable 24 hour time given the number of minutes that have passed since midnight
