@@ -24,7 +24,7 @@ int getWeekday();
 int numberOfShows(int showTime, int runTime, int openTime);
 std::string formattedTime(int m, bool shouldPadHour);
 void printScheduleOfMovie(Movie mov, int openTime, int closeTime);
-std::vector<int> populateShowtimes(int runTime, int mustEndBy, int openTime, std::vector<int> timesSoFar=std::vector<int>());
+void populateShowtimes(int runTime, int mustEndBy, int openTime, std::vector<int> &timesSoFar);
 
 
 int main(int argc, const char * argv[]) {
@@ -90,7 +90,8 @@ void printScheduleOfMovie(Movie mov, int openTime, int closeTime){
     
     //Populate the showtimes vector prioritizing maximum amount of showings first,
     //Latest possible times second, and readability of times third
-    std::vector<int> showtimes = populateShowtimes(mov.getRunTimeMinutes(), closeTime, openTime);
+    std::vector<int> showtimes;
+    populateShowtimes(mov.getRunTimeMinutes(), closeTime, openTime, showtimes);
     
     //Movie Header
     std::cout << mov.getTitle() << " -- Rated " << mov.getRating();
@@ -116,13 +117,15 @@ void printScheduleOfMovie(Movie mov, int openTime, int closeTime){
  4. If it did, use the original showtime, not the easy-to-read one.
  5. Repeat the above rules on the next latest showtime, using this one as the new "closing time"*/
 
-std::vector<int> populateShowtimes(int runTime, int mustEndBy, int openTime, std::vector<int> timesSoFar){
+void populateShowtimes(int runTime, int mustEndBy, int openTime, std::vector<int> &timesSoFar){
     int latestShowStart = mustEndBy-runTime;
     int maxShows = numberOfShows(latestShowStart, runTime, openTime);
     
-    if(maxShows == 0)//Stopping case
-        return timesSoFar;
+    //Stopping case
+    if(maxShows == 0) return;
     
+
+    //Move showtime of latest show if it doesn't decrease total number of shows
     if(latestShowStart%5 != 0){
         int lastDigit = latestShowStart%10;
         int newLatestShow = lastDigit > 5 ? latestShowStart-(lastDigit-5) : latestShowStart-lastDigit;
@@ -132,7 +135,9 @@ std::vector<int> populateShowtimes(int runTime, int mustEndBy, int openTime, std
     }
     
     timesSoFar.push_back(latestShowStart);
-    return populateShowtimes(runTime, latestShowStart-35, openTime, timesSoFar);
+    
+    //Recursive step
+    populateShowtimes(runTime, latestShowStart-35, openTime, timesSoFar);
     
 }
 
