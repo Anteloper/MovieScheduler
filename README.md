@@ -1,7 +1,7 @@
 # MovieSchduler
 
 ###Usage
-In a unix environment:<br \> <br \> 
+In a unix environment:<br \> 
 
 ```
 g++ main.cpp

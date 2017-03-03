@@ -32,7 +32,6 @@ int main(int argc, const char * argv[]) {
     int closeTime;
     std::vector<Movie> movies;
     
-    
     //Monday - Thursday: 8am open, 11pm close
     if(getWeekday() > 0 && getWeekday() <5 ){
         openTime = 480;
@@ -43,7 +42,6 @@ int main(int argc, const char * argv[]) {
         openTime = 630;
         closeTime = 1410;
     }
-
     
     //User can optionally change open/close time from the command line
     //First argument after filename is opening time in minutes since midnight of that morning
@@ -69,9 +67,9 @@ int main(int argc, const char * argv[]) {
             std::cout << exc;
         }
     }
-    else{
+    else
         std::cout << "Incorrect number of arguments entered, program will terminated \n\n";
-    }
+    
     return 0;
 }
 
@@ -124,7 +122,6 @@ void printScheduleOfMovie(Movie &mov, int openTime, int closeTime){
 }
 
 
-
 /*Recursively populates a vector full of showtimes with the philosophy that it is never
  worth losing a movie showing for the sake of easy-to-read times. Rules for this are the following:
  1. Check the maximum number of showtimes possible by starting at the latest possible time to the close
@@ -139,13 +136,13 @@ void populateShowtimes(int runTime, int mustEndBy, int openTime, std::vector<int
     
     //Stopping case
     if(maxShows == 0) return;
-    
 
-    //Move showtime of latest show if it doesn't decrease total number of shows
+    //If showtime isn't already readable
     if(latestShowStart%5 != 0){
         int lastDigit = latestShowStart%10;
         int newLatestShow = lastDigit > 5 ? latestShowStart-(lastDigit-5) : latestShowStart-lastDigit;
         
+        //Change to the earliest readable version if the readable version doesnt lose a showing
         if(numberOfShows(newLatestShow, runTime, openTime) == maxShows)
             latestShowStart = newLatestShow;
     }
@@ -154,7 +151,6 @@ void populateShowtimes(int runTime, int mustEndBy, int openTime, std::vector<int
     
     //Recursive step
     populateShowtimes(runTime, latestShowStart-35, openTime, timesSoFar);
-    
 }
 
 
