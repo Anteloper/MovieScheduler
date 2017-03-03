@@ -14,8 +14,9 @@ The example above opens the theater at noon and closes it at at 11pm.
 
 ###Philosophy
 In general in my code when forced to make a tradeoff, I chose simplicity and readability of code over efficiency.<br \>
-I contemplated using global variables to minimize expensive arguments such as vectors being returned by value by some functions<br \>
-but decided against it, for the decreased maintainability that global variables create <br \>
+I contemplated using global variables to minimize redundantly passing parameters such as opening time, closing time, and vectors containing 
+movie and showtime data but decided against it, for the decreased maintainability that global variables create. When passing vectors or Movie
+objects to and from functions, I passed by reference to minimize the overhead of copying by value <br \>
 
 In attacking the core problem of scheduling, I prioritized maximum number of showings in a day above all else. <br \>
 I assumed A movie may end at the same minute that the theater closes. <br \>

@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <string>
 
-
+//Each instance stores an individual movie
 class Movie{
 private:
     std::string title;
@@ -26,11 +26,13 @@ public:
         this->title = line.substr(0, titlePointer);
         this->yearReleased = std::stoi(line.substr(titlePointer+2, yearPointer-titlePointer-2));
         this->rating = line.substr(yearPointer+2, ratingPointer-yearPointer-2);
+        
         int hours = std::stoi(line.substr(ratingPointer+2, hoursPointer-ratingPointer-2));
         int minutes = std::stoi(line.substr(hoursPointer+1));
         this->runTimeMinutes = hours*60 + minutes;
     }
     
+    //Constructs a Movie object from parameters
     Movie(std::string title, int yearReleased, std::string rating, int runTimeMinutes){
         this->title = title;
         this->yearReleased = yearReleased;

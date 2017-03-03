@@ -23,14 +23,27 @@ std::string getDateString();
 int getWeekday();
 int numberOfShows(int showTime, int runTime, int openTime);
 std::string formattedTime(int m, bool shouldPadHour);
-void printScheduleOfMovie(Movie mov, int openTime, int closeTime);
+void printScheduleOfMovie(Movie &mov, int openTime, int closeTime);
 void populateShowtimes(int runTime, int mustEndBy, int openTime, std::vector<int> &timesSoFar);
 
 
 int main(int argc, const char * argv[]) {
-    int openTime = getWeekday() < 5 ? 480 : 630;
-    int closeTime = getWeekday() < 5 ? 1380 : 1410;
+    int openTime;
+    int closeTime;
     std::vector<Movie> movies;
+    
+    
+    //Monday - Thursday: 8am open, 11pm close
+    if(getWeekday() > 0 && getWeekday() <5 ){
+        openTime = 480;
+        closeTime = 1380;
+    }
+    //Friday-Sunday: 10:30am open, 11:30pm close
+    else{
+        openTime = 630;
+        closeTime = 1410;
+    }
+
     
     //User can optionally change open/close time from the command line
     //First argument after filename is opening time in minutes since midnight of that morning
@@ -63,6 +76,8 @@ int main(int argc, const char * argv[]) {
 }
 
 
+//Reads the input file, creates a movie object for each line, stores it in vector passed in
+//May throw an exception if file is not read properly
 void readFile(const char * fileName, std::vector<Movie> &movies){
     std::ifstream inputFile;
     std::string line;
@@ -85,7 +100,7 @@ void readFile(const char * fileName, std::vector<Movie> &movies){
 
 
 //Prints the day's schedule for an individual movie to the console
-void printScheduleOfMovie(Movie mov, int openTime, int closeTime){
+void printScheduleOfMovie(Movie &mov, int openTime, int closeTime){
     std::string indent = "     ";
     
     //Populate the showtimes vector prioritizing maximum amount of showings first,
@@ -96,6 +111,7 @@ void printScheduleOfMovie(Movie mov, int openTime, int closeTime){
     //Movie Header
     std::cout << mov.getTitle() << " -- Rated " << mov.getRating();
     std::cout << ", " << formattedTime(mov.getRunTimeMinutes(), false) << std::endl;
+    
     
     for(int i = showtimes.size()-1; i>=0; i--){
         int startTime = showtimes.at(i);
