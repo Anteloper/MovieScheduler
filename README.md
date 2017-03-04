@@ -19,7 +19,7 @@ movie and showtime data but decided against it, for the decreased maintainabilit
 objects to and from functions, I passed by reference to minimize the overhead of copying by value <br \>
 
 In attacking the core problem of scheduling, I prioritized maximum number of showings in a day above all else. <br \>
-I assumed A movie may end at the same minute that the theater closes. <br \>
+I assumed a movie may end at the same minute that the theater closes. <br \>
 The next priority was scheduling as late in the day as possible, and the final priority was creating readable showtimes<br \> <br \> 
 
 
@@ -40,4 +40,4 @@ For each show in the maximum-showtime schedule, do the following:<br \><br \>
 In choosing how to store the data in an abstract data type, I was faced with choice of classes or structs. 
 In some ways, this problem lended itself to structs, as the member variables had no real need to be protected from the programmer using them
 and the movie objects were essentially just a bag of data, with no crucial member functions. I opted for classes instead however,
-largely because the Movie data type needed to std::strings which aren't primitive types and minimize the advantages of structs.
+largely because the Movie data type needed to store std::strings which aren't primitive types and minimize the advantages of structs.
