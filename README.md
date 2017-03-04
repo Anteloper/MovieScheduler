@@ -35,7 +35,7 @@ For each show in the maximum-showtime schedule, do the following:<br \><br \>
  3. Move the last showtime to the earliest easy-to-read time <br \>
  4. If this change is smaller than the remainng amount of slack, make the change and update the remaining slack <br \>
  5. Otherwise, use the original showtime, not the easy-to-read one.<br \>
- 6. Repeat the 3-6 rules on the next latest showtime, using this one as the new "closing time"<br \><br \>
+ 6. Repeat recursive rules 1-4 on the next latest showtime, using this one as the new "closing time"<br \><br \>
 
 In choosing how to store the data in an abstract data type, I was faced with choice of classes or structs. 
 In some ways, this problem lended itself to structs, as the member variables had no real need to be protected from the programmer using them
