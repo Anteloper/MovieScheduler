@@ -22,12 +22,18 @@ In attacking the core problem of scheduling, I prioritized maximum number of sho
 I assumed A movie may end at the same minute that the theater closes. <br \>
 The next priority was scheduling as late in the day as possible, and the final priority was creating readable showtimes<br \> <br \> 
 
-I solved this problem recursively, using the following rules<br \>
- 1. Check the maximum number of showtimes possible by starting at the latest possible time to the close<br \>
- 2. Move the last showtime to the earliest easy-to-read time<br \>
- 3. Check if the maximum number of shows in the day changed as a result of the move<br \>
- 4. If it did, use the original showtime, not the easy-to-read one.<br \>
- 5. Repeat the above rules on the next latest showtime, using this one as the new "closing time"<br \><br \>
+
+
+I solved this problem recursively, using the following rules.<br \>
+1. Check the maximum number of showtimes possible by starting at the latest possible time to the close<br \>
+2. Compute the amount of minutes of "slack" exist in the shedule that shows the maximum shows<br \>
+
+For each show in the maximum-showtime schedule, do the following:<br \>
+ 
+ 3. Move the last showtime to the earliest easy-to-read time <br \>
+ 4. If this change is smaller than the remainng amount of slack, make the change and update the remaining slack <br \>
+ 5. Otherwise, use the original showtime, not the easy-to-read one.<br \>
+ 6. Repeat the 3-6 rules on the next latest showtime, using this one as the new "closing time"<br \><br \>
 
 In choosing how to store the data in an abstract data type, I was faced with choice of classes or structs. 
 In some ways, this problem lended itself to structs, as the member variables had no real need to be protected from the programmer using them

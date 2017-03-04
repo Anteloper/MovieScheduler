@@ -21,10 +21,10 @@ const int setupTime = 60;
 void readFile(const char * filename, std::vector<Movie> &movies);
 std::string getDateString();
 int getWeekday();
-int numberOfShows(int showTime, int runTime, int openTime);
+std::pair<int, int> numberOfShows(int runTime, int openTime, int closeTime);
 std::string formattedTime(int m, bool shouldPadHour);
 void printScheduleOfMovie(Movie &mov, int openTime, int closeTime);
-void populateShowtimes(int runTime, int mustEndBy, int openTime, std::vector<int> &timesSoFar);
+void populateShowtimes(int runTime, int mustEndBy, int showNum, int freeMinutesRemaining, std::vector<int> &timesSoFar);
 
 
 int main(int argc, const char * argv[]) {
@@ -101,10 +101,13 @@ void readFile(const char * fileName, std::vector<Movie> &movies){
 void printScheduleOfMovie(Movie &mov, int openTime, int closeTime){
     std::string indent = "     ";
     
+    //Shows in the day are zero indexed so the first showing is show #0
+    std::pair<int, int> scheduleDetails = numberOfShows(mov.getRunTimeMinutes(), openTime, closeTime);
+    
     //Populate the showtimes vector prioritizing maximum amount of showings first,
     //Latest possible times second, and readability of times third
     std::vector<int> showtimes;
-    populateShowtimes(mov.getRunTimeMinutes(), closeTime, openTime, showtimes);
+    populateShowtimes(mov.getRunTimeMinutes(), closeTime, scheduleDetails.first-1, scheduleDetails.second, showtimes);
     
     //Movie Header
     std::cout << mov.getTitle() << " -- Rated " << mov.getRating();
@@ -130,40 +133,47 @@ void printScheduleOfMovie(Movie &mov, int openTime, int closeTime){
  4. If it did, use the original showtime, not the easy-to-read one.
  5. Repeat the above rules on the next latest showtime, using this one as the new "closing time"*/
 
-void populateShowtimes(int runTime, int mustEndBy, int openTime, std::vector<int> &timesSoFar){
+void populateShowtimes(int runTime, int mustEndBy, int showNum, int freeMinutesRemaining, std::vector<int> &timesSoFar){
+    
     int latestShowStart = mustEndBy-runTime;
-    int maxShows = numberOfShows(latestShowStart, runTime, openTime);
     
     //Stopping case
-    if(maxShows == 0) return;
+    if(showNum < 0) return;
 
     //If showtime isn't already readable
     if(latestShowStart%5 != 0){
         int lastDigit = latestShowStart%10;
-        int newLatestShow = lastDigit > 5 ? latestShowStart-(lastDigit-5) : latestShowStart-lastDigit;
+        int timeChange = lastDigit > 5 ? lastDigit-5 : lastDigit;
         
         //Change to the earliest readable version if the readable version doesnt lose a showing
-        if(numberOfShows(newLatestShow, runTime, openTime) == maxShows)
-            latestShowStart = newLatestShow;
+        if(freeMinutesRemaining >= timeChange){
+            latestShowStart = latestShowStart-timeChange;
+            freeMinutesRemaining -= timeChange;
+        }
     }
     
     timesSoFar.push_back(latestShowStart);
     
     //Recursive step
-    populateShowtimes(runTime, latestShowStart-35, openTime, timesSoFar);
+    populateShowtimes(runTime, latestShowStart-35, showNum-1, freeMinutesRemaining, timesSoFar);
 }
 
 
 
 //Returns the maximum number of shows possible, assuming showTime is the LAST possible showtime
-int numberOfShows(int showTime, int runTime, int openTime){
+//And the amount of time remaining at the beginning of the day once all movies are accounted for
+std::pair<int, int> numberOfShows(int runTime, int openTime, int closeTime){
+    int showTime = closeTime-runTime;
     int num = 0;
     
-    while(showTime-setupTime >= openTime){
+    while(showTime >= openTime+setupTime){
         num++;
         showTime -= (runTime + cleanupTime);
     }
-    return num;
+    showTime += runTime+cleanupTime;
+    
+    //Maximum number of shows, amount of "slack" in the schedule
+    return {num, showTime-openTime};
 }
 
 
