@@ -24,11 +24,13 @@ The next priority was scheduling as late in the day as possible, and the final p
 
 
 
-I solved this problem recursively, using the following rules.<br \>
-1. Check the maximum number of showtimes possible by starting at the latest possible time to the close<br \>
-2. Compute the amount of minutes of "slack" exist in the shedule that shows the maximum shows<br \>
+The algorithm I used to calculate a schedule was:
 
-For each show in the maximum-showtime schedule, do the following:<br \>
+1. Check the maximum number of showtimes possible by starting at the latest possible time to the close<br \>
+2. Compute the amount of minutes of "slack" exist in this maximum-shwtime schedule<br \><br \>
+
+From here, solved this problem recursively, using the following rules.<br \>
+For each show in the maximum-showtime schedule, do the following:<br \><br \>
  
  3. Move the last showtime to the earliest easy-to-read time <br \>
  4. If this change is smaller than the remainng amount of slack, make the change and update the remaining slack <br \>
